@@ -111,11 +111,11 @@ ggplotly(trend_ghp)
 
 ```{r echo=FALSE,message=F,warning=FALSE}
   map_1 <- SADC_malaria_map_df%>% 
-    filter(!is.na(deaths) & period==2006) %>% 
+    filter(!is.na(deaths) & period==2005) %>% 
   ggplot()+
   geom_sf(aes(fill=deaths))+
    geom_sf_text(aes(label = geounit), size = 3, color = "black", check_overlap = TRUE) +
-  labs(title="Number of Death Reported as of the year 2006")+
+  labs(title="Number of Death Reported as of the year 2005")+
   theme(plot.title = element_text(hjust = 0.7))+
 theme_void()+
     ggspatial::annotation_north_arrow(location="tl")+
@@ -128,6 +128,28 @@ theme_void()+
 ggplotly(map_1)
 ```
 
+
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+SADCV2 <-SADC %>% dplyr::filter(year==max(year))
+radius <- sqrt( SADCV2$pop/ pi )
+
+```
+
+
+# Country Profile
+This graph provides an overview of how wealth, health, and population intersect across different nations. Keep in mind that outliers exist, and other factors may influence life expectancy beyond GDP per capita. 🌍📊
+
+## Row 1 
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+bubble <- symbols(SADCV2$gdpPercap, SADCV2$lifeExp, circles=radius,
+inches=0.35, fg="white", bg="red", xlab="GDP Per capita", ylab="Life Expectancy")+
+
+text(SADCV2$gdpPercap, SADCV2$lifeExp, SADCV2$country, cex=0.8)
+
+
+bubble
+```
 # Download
 ```{r}
 library(htmltools)
@@ -152,3 +174,4 @@ htmltools::browsable(
   )
 )
 ```
+
